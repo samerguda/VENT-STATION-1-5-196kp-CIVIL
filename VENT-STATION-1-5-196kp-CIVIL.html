@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A1 Vocabulair - Dutch /title>
+    <title>A1 Vocabulair - Dutch</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -104,7 +104,7 @@
         <!-- Topic 3 -->
         <li class="topic-item">
             <div class="topic-text">
-                <span class="arabic">3. البيت والغرف</span> — <span class="dutch">Het huis en de kamers</span>
+                <span class="arabic">3. البيت وغرف الأثاث</span> — <span class="dutch">Het huis en de kamers</span>
             </div>
             <button class="copy-btn" onclick="copyText('Het huis en de kamers Vocabulair', this)">نسخ</button>
         </li>
@@ -232,7 +232,7 @@
             <div class="topic-text">
                 <span class="arabic">21. الهوايات</span> — <span class="dutch">Hobby's</span>
             </div>
-            <button class="copy-btn" onclick="copyText('Hobby\'s Vocabulair', this)">نسخ</button>
+            <button class="copy-btn" onclick='copyText("Hobby&#39;s Vocabulair", this)'>نسخ</button>
         </li>
         <!-- Topic 22 -->
         <li class="topic-item">
@@ -267,7 +267,7 @@
 
 <script>
     function copyText(text, btnElement) {
-        navigator.clipboard.writeText(text).then(() => {
+        function showSuccess() {
             const originalText = btnElement.innerText;
             btnElement.innerText = "تم النسخ!";
             btnElement.classList.add("copied");
@@ -276,9 +276,28 @@
                 btnElement.innerText = originalText;
                 btnElement.classList.remove("copied");
             }, 1500);
-        }).catch(err => {
-            console.error('فشل النسخ: ', err);
-        });
+        }
+
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text).then(showSuccess).catch(err => {
+                console.error('فشل النسخ: ', err);
+            });
+        } else {
+            // طريقة بديلة في حال عدم توفر navigator.clipboard
+            const textarea = document.createElement("textarea");
+            textarea.value = text;
+            textarea.style.position = "fixed";
+            textarea.style.left = "-9999px";
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showSuccess();
+            } catch (err) {
+                console.error('فشل النسخ البديل: ', err);
+            }
+            document.body.removeChild(textarea);
+        }
     }
 </script>
 
